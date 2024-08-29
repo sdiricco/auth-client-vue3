@@ -9,8 +9,10 @@ const { getUserId } = storeToRefs(authStore)
 
 const login = async (evt:any) => {
     evt.preventDefault();
-    await authStore.login({username: username.value, password: password.value})
-    router.push({name: 'HomePage'})
+    const response = await authStore.login({username: username.value, password: password.value})
+    if (response?.success) {
+      router.push({name: 'HomePage'})
+    }
 
 }
 

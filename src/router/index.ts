@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-const rootPage = () => import('@/views/Root.vue');
 const aboutPage = () => import('@/views/About.vue');
 const registrationPage = () => import('@/views/Registration.vue');
 const loginPage = () => import('@/views/Login.vue');

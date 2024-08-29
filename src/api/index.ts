@@ -1,5 +1,6 @@
-import axiosInstance from './axiosInstance';
-import { type IUser,type ITodo } from './types';
+import axiosUserApi from './axiosUserApi';
+import axiosAuthApi from './axiosAuthApi';
+import { type IUser,type ITodo, ILoginResponse, IRegistrationResponse } from './types';
 
 /**
  * Registers a new user with the given username and password.
@@ -11,7 +12,7 @@ import { type IUser,type ITodo } from './types';
  * @throws {Error} If the server returns a non-200 status code.
  */
 export const registerUser = async (data: {username:string, password: string}) => {
-  return axiosInstance.post<IUser>('/register', data);
+  return axiosAuthApi.post<IRegistrationResponse>('/register', data);
 };
 
 
@@ -25,7 +26,7 @@ export const registerUser = async (data: {username:string, password: string}) =>
  * @throws {Error} If the server returns a non-200 status code.
  */
 export const loginUser = async (data: {username:string, password: string}) => {
-  return axiosInstance.post<IUser>('/login', data);
+  return axiosAuthApi.post<ILoginResponse>('/login', data);
 };
 
 
@@ -40,7 +41,7 @@ export const loginUser = async (data: {username:string, password: string}) => {
  * @throws {Error} If the server returns a non-200 status code.
  */
 export const createUserTodo = async (userId: string, data: {title:string, content: string}) => {
-  return axiosInstance.post<ITodo>(`/user/${userId}/todo`, data);
+  return axiosUserApi.post<ITodo>(`/user/${userId}/todo`, data);
 };
 
 
@@ -51,7 +52,7 @@ export const createUserTodo = async (userId: string, data: {title:string, conten
  * @throws {Error} - If the server returns an error
  */
 export const getUserTodo = async (userId: string, todoId: string) => {
-  return axiosInstance.get<ITodo>(`/user/${userId}/todo/${todoId}`);
+  return axiosUserApi.get<ITodo>(`/user/${userId}/todo/${todoId}`);
 };
 
 
@@ -62,7 +63,7 @@ export const getUserTodo = async (userId: string, todoId: string) => {
  * @throws {Error} If the server returns a non-200 status code.
  */
 export const getAllUserTodos = async (userId: string) => {
-  return axiosInstance.get<ITodo[]>(`/user/${userId}/todo`);
+  return axiosUserApi.get<ITodo[]>(`/user/${userId}/todo`);
 }
 
 
@@ -76,7 +77,7 @@ export const getAllUserTodos = async (userId: string) => {
  * @throws {Error} - If the server returns a non-200 status code.
  */
 export const updateUserTodo = async (userId: string, infoId: string, data: {title:string, content: string}) => {
-  return axiosInstance.put<ITodo>(`/user/${userId}/todo/${infoId}`, data);
+  return axiosUserApi.put<ITodo>(`/user/${userId}/todo/${infoId}`, data);
 };
 
 
@@ -89,5 +90,5 @@ export const updateUserTodo = async (userId: string, infoId: string, data: {titl
  * @throws {Error} - If the server returns a non-200 status code.
  */
 export const deleteUserTodo = async (userId: string, todoId: string) => {
-  return axiosInstance.delete<ITodo>(`/user/${userId}/todo/${todoId}`);
+  return axiosUserApi.delete<ITodo>(`/user/${userId}/todo/${todoId}`);
 };

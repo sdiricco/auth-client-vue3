@@ -7,10 +7,12 @@ const authStore = useAuthStore()
 
 const { getUserId } = storeToRefs(authStore)
 
-const registration = (evt:any) => {
-    evt.preventDefault();
-    authStore.register({username: username.value, password: password.value})
+const registration = async (evt:any) => {
+  evt.preventDefault();
+  const response = await authStore.register({username: username.value, password: password.value})
+  if (response?.success) {
     router.push({name: 'HomePage'})
+  }
 }
 
 const username = ref('')

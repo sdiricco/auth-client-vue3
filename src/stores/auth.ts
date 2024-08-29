@@ -1,18 +1,31 @@
 import { defineStore } from 'pinia';
 import { registerUser, loginUser } from '../api'; // Importa le funzioni API
 import { useStorage } from '@vueuse/core';
+import {jwtDecode} from 'jwt-decode';
+import { ITokenPayload } from '@/api/types';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: useStorage('user', {
-      _id: '',
-      username: '',
-    }),
+    token: useStorage('token', ''),
   }),
   getters: {
-    isAuthenticated: (state) => state.user._id !== '',
-    getUser: (state) => state.user,
-    getUserId:  (state) => state.user._id,
+    getTokenPayload(state): ITokenPayload {
+      try {
+        return jwtDecode<ITokenPayload>(state.token)
+      } catch (error) {
+        console.warn('Token not found');
+        return { username: '', id: '', iat: 0, exp: 0 };
+      }
+    },
+    isAuthenticated(): boolean {
+      return this.getTokenPayload.id !== ''
+    },
+    getUsername(): string{
+      return this.getTokenPayload.username
+    },
+    getUserId(): string{
+      return this.getTokenPayload.id
+    }
   },
   actions: {
     /**
@@ -27,10 +40,7 @@ export const useAuthStore = defineStore('auth', {
     async register(data: {username:string, password: string}) {
       try {
         const response = await registerUser(data);
-        this.user = {
-          _id: response.data.user._id,
-          username: response.data.user.username
-        }
+        return response.data
       } catch (error: any) {
         alert(error.response?.data?.message || 'An error occurred during registration.');
       }
@@ -46,10 +56,8 @@ export const useAuthStore = defineStore('auth', {
     async login(data: {username:string, password: string}) {
       try {
         const response = await loginUser(data);
-        this.user = {
-          _id: response.data.user._id,
-          username: response.data.user.username
-        };
+        this.token = response.data.token;  
+        return response.data
       } catch (error: any) {
         alert(error.response?.data?.message || 'An error occurred during login.');
       }
@@ -58,10 +66,7 @@ export const useAuthStore = defineStore('auth', {
      * Logs out the current user by clearing the user object and setting the error to null.
      */
     logout() {
-      this.user = {
-        _id: '',
-        username: ''
-      };
+      this.token = ''
     }
   },
 });
