@@ -1,6 +1,6 @@
 import axiosUserApi from './axiosUserApi';
 import axiosAuthApi from './axiosAuthApi';
-import { type IUser,type ITodo, ILoginResponse, IRegistrationResponse } from './types';
+import { type ITodo, ILoginResponse, IRegistrationResponse } from './types';
 
 /**
  * Registers a new user with the given username and password.
