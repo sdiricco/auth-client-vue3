@@ -31,7 +31,7 @@ onMounted(() => {
     <div class="text-xl mb-3">
       Create an account
     </div>
-    <form class="flex flex-column w-2" @submit="registration">
+    <form class="flex flex-column w-20rem" @submit="registration">
       <div class="mb-3 flex flex-column">
         <label for="username" class="form-label" >Username</label>
         <input type="text" class="form-control" id="username" v-model="username">
